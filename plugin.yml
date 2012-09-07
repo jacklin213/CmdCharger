@@ -1,0 +1,13 @@
+name: Configtest
+version: 0.1
+description: A Configtest plugin
+author: Jacklin213
+
+main: me.jacklin213.cmdcharger.CmdCharger
+depend: [Vault]
+
+commands:
+    cmdcharge:
+      description: test
+      usage: /cmdcharge setprice [command] [price]
+      aliases: cc
