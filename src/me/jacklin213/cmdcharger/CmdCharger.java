@@ -31,7 +31,8 @@ public class CmdCharger extends JavaPlugin {
     @Override
     public void onEnable() {
         if (!setupEconomy() ) {
-            log.info(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            log.warning(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            log.info(String.format("[%s] - Download a chat , permissions , economy and vault before using this plugin!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -65,7 +66,7 @@ public class CmdCharger extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command cmd,
 			String commandLabel, String[] args) {
 		if (commandLabel.equalsIgnoreCase("cmdcharge") || commandLabel.equalsIgnoreCase("cc")){
-			if (args.length > 1){
+			if (args.length > 3){
 				if (args[0].equalsIgnoreCase("setprice") || commandLabel.equalsIgnoreCase("sp")){
 					String command = args[1];
 					try {
@@ -78,11 +79,16 @@ public class CmdCharger extends JavaPlugin {
                     }
 					return true;
 				}
-			}else if(args.length < 4){
+			}else if(args.length < 3){
 				sender.sendMessage("Not enough arguments !");
 				return true;
-			}
+				}else{
+					sender.sendMessage("This is not a valid command");
+					return true;
+				}
+			
 			sender.sendMessage("test");
+			return true;
 		}
 
 		return false;
