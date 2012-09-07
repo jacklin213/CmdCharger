@@ -82,10 +82,6 @@ public class CmdCharger extends JavaPlugin {
 				sender.sendMessage("Not enough arguments !");
 				return true;
 			}
-			else if (args.length < 1){
-				sender.sendMessage("Not enough arguments !");
-				return true;
-			}
 			sender.sendMessage("test");
 		}
 
