@@ -1,6 +1,9 @@
-#=== Configtest - config (made by Jacklin213) ===#
+#=== CmdCharger - config (made by Jacklin213) ===#
 No-Money-Msg: 'Sorry! You need %price% to run %cmd%'
 Prices:
   Commands:
     ExampleCommand: # Put your command name where ExmapleCommand is 
       Price: 1.50
+    Essentialsspawn:
+      Price: 2.35
+    CmdCharger setprice [command] [price]: #how would i get this command because it had variables in it [command] [price]
