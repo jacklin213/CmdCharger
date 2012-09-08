@@ -43,29 +43,43 @@ public class CmdCharger extends JavaPlugin {
     }
 
 
-	public void createconfig() {
+    public void createconfig() {
 		// Creates config.yml
-		File file = new File(getDataFolder() + File.separator + "config.yml");
+		File configfile = new File(getDataFolder() + File.separator + "config.yml");
 		// If config.yml doesnt exit
-		if (!file.exists()) {
+		if (!configfile.exists()) {
 			// Tells console its creating a config.yml
 			this.getLogger().info("You don't have a config file!!!");
-			this.getLogger().info("Generating config.yml.....");
-			String nomoneymsg = "Sorry! You need %price% to run %cmd%";
-			this.getConfig().set("No-Money-Msg", nomoneymsg);
-			this.getConfig().set("Prices.Commands.ExampleCommand", "# Put your command name where ExmapleCommand is ");
-			int ecp = 1; //examplecommandprice
-			this.getConfig().set("Prices.Commands.ExampleCommand.Price", ecp );
+			this.getLogger().info("Generating config.yml....."); 
 			this.getConfig().options().copyDefaults(true);
 			this.saveDefaultConfig();
-			this.getLogger().info("Config.yml generated");
 		}
 
-	}
+    }
+    
+    
 
 	public boolean onCommand(CommandSender sender, Command cmd,
 			String commandLabel, String[] args) {
 		if (commandLabel.equalsIgnoreCase("cmdcharge") || commandLabel.equalsIgnoreCase("cc")){
+			if (args.length >= 1){
+				if (args[0].equalsIgnoreCase("testprice")){
+					String command = args[1];
+					this.getConfig().set("Prices.Commands." + command, command);
+					this.saveConfig();
+					try {
+                        int price = Integer.parseInt(args[2]);
+                        this.getConfig().set("Prices.Commands." + command + ".Price", price);
+            			this.saveConfig();
+            			sender.sendMessage("The price for " + command + " has been set to:" + price);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(ChatColor.RED + "This is not a number! Try typing a number in");
+                    }
+					return true;
+				}else{
+					sender.sendMessage("testfailed");
+				}	
+			}else
 			if (args.length > 3){
 				if (args[0].equalsIgnoreCase("setprice") || commandLabel.equalsIgnoreCase("sp")){
 					String command = args[1];
@@ -78,13 +92,13 @@ public class CmdCharger extends JavaPlugin {
                         sender.sendMessage(ChatColor.RED + "This is not a number! Try typing a number in");
                     }
 					return true;
+				}else{
+					sender.sendMessage("This is not a valid command");
+					return true;
 				}
 			}else if(args.length < 3){
 				sender.sendMessage("Not enough arguments !");
 				return true;
-				}else{
-					sender.sendMessage("This is not a valid command");
-					return true;
 				}
 			
 			sender.sendMessage("test");

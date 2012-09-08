@@ -3,4 +3,4 @@ No-Money-Msg: 'Sorry! You need %price% to run %cmd%'
 Prices:
   Commands:
     ExampleCommand: # Put your command name where ExmapleCommand is 
-      Price: 1
+      Price: 1.50
