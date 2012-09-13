@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +23,7 @@ public class CmdCharger extends JavaPlugin {
 	public static Economy econ = null;
 	public static Permission perms = null;
 	public static Chat chat = null;
+	public CommandListener cl = new CommandListener(this);
 
 	@Override
 	public void onDisable() {
@@ -31,6 +33,7 @@ public class CmdCharger extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		PluginManager pm = getServer().getPluginManager();
 		if (!setupEconomy()) {
 			log.warning(String.format(
 					"[%s] - Disabled due to no Vault dependency found!",
@@ -44,6 +47,7 @@ public class CmdCharger extends JavaPlugin {
 		setupPermissions();
 		setupChat();
 		createconfig();
+		pm.registerEvents(this.cl,this);
 		log.info(String.format("[%s] Enabled Version %s", getDescription()
 				.getName(), getDescription().getVersion()));
 	}
@@ -68,53 +72,61 @@ public class CmdCharger extends JavaPlugin {
 		if (commandLabel.equalsIgnoreCase("cmdcharge")
 				|| commandLabel.equalsIgnoreCase("cc")) {
 			if (args.length >= 3) {
-					if (args[0].equalsIgnoreCase("testprice")) {
-						String command = args[1];
-						this.getConfig().set("Prices.Commands." + command,
-								command);
-						this.saveConfig();
-						try {
-							int price = Integer.parseInt(args[2]);
-							this.getConfig().set(
-									"Prices.Commands." + command + ".Price",
-									price);
-							this.saveConfig();
-							sender.sendMessage("The price for " + command
-									+ " has been set to:" + price);
-						} catch (NumberFormatException e) {
-							sender.sendMessage(ChatColor.RED
-									+ "This is not a number! Try typing a number in");
-						}
-						return true;
-					} else {
-						sender.sendMessage("testfailed");
-					}
-			}else if (args.length <= 1){
-				if (args[0].equalsIgnoreCase("help")){
+				if (args[0].equalsIgnoreCase("testprice")) {
+					String command = args[1];
+					this.getConfig().set("Prices.Commands." + command, command);
+					this.saveConfig();
 					try {
-                        int page = Integer.parseInt(args[0]);
-
-                        if (page == 1) {
-                            sender.sendMessage(ChatColor.YELLOW + " ------------ " + ChatColor.WHITE + "Help: mcRP Skills (Page 1)" + ChatColor.YELLOW + " ------------");
-                            sender.sendMessage(ChatColor.GOLD + "/cmdcharge" + ChatColor.GRAY + " - " + ChatColor.WHITE + "Shows info");
-                            sender.sendMessage(ChatColor.GOLD + "/cmdcharge setprice [command] [price]" + ChatColor.GRAY + " - " + ChatColor.WHITE + "Set price for command!");
-                            
-                        } else {
-                            sender.sendMessage(ChatColor.RED + " Invalid page number specified. There is only 1 page right now.");
-                        }
-                    } catch (NumberFormatException nfe) {
-                        sender.sendMessage(ChatColor.RED + " Invalid page number specified. There is only 1 page right now.");
-                    }
+						int price = Integer.parseInt(args[2]);
+						this.getConfig().set(
+								"Prices.Commands." + command + ".Price", price);
+						this.saveConfig();
+						sender.sendMessage("The price for " + command
+								+ " has been set to:" + price);
+					} catch (NumberFormatException e) {
+						sender.sendMessage(ChatColor.RED
+								+ "This is not a number! Try typing a number in");
+					}
+					return true;
+				} else {
+					sender.sendMessage("testfailed");
 				}
-				
+			} else if (args.length <= 1) {
+				if (args[0].equalsIgnoreCase("help")) {
+					try {
+						int page = Integer.parseInt(args[0]);
+
+						if (page == 1) {
+							sender.sendMessage(ChatColor.YELLOW
+									+ " ------------ " + ChatColor.WHITE
+									+ "Help: mcRP Skills (Page 1)"
+									+ ChatColor.YELLOW + " ------------");
+							sender.sendMessage(ChatColor.GOLD + "/cmdcharge"
+									+ ChatColor.GRAY + " - " + ChatColor.WHITE
+									+ "Shows info");
+							sender.sendMessage(ChatColor.GOLD
+									+ "/cmdcharge setprice [command] [price]"
+									+ ChatColor.GRAY + " - " + ChatColor.WHITE
+									+ "Set price for command!");
+
+						} else {
+							sender.sendMessage(ChatColor.RED
+									+ " Invalid page number specified. There is only 1 page right now.");
+						}
+					} catch (NumberFormatException nfe) {
+						sender.sendMessage(ChatColor.RED
+								+ " Invalid page number specified. There is only 1 page right now.");
+					}
+				}
+
 			}
-			
+
 			return info(sender);
 		}
 		return false;
 	}
 
-	public boolean info(CommandSender sender){
+	public boolean info(CommandSender sender) {
 		sender.sendMessage(ChatColor.DARK_GREEN
 				+ "+------------------------------+");
 		sender.sendMessage(ChatColor.DARK_AQUA
@@ -126,7 +138,7 @@ public class CmdCharger extends JavaPlugin {
 				+ "+------------------------------+");
 		return true;
 	}
-	
+
 	// Vault api import crap
 	private boolean setupEconomy() {
 		if (getServer().getPluginManager().getPlugin("Vault") == null) {

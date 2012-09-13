@@ -4,6 +4,6 @@ Prices:
   Commands:
     ExampleCommand: # Put your command name where ExmapleCommand is 
       Price: 1.50
-    Essentialsspawn:
+    needtown:
       Price: 2.35
     CmdCharger setprice [command] [price]: #how would i get this command because it had variables in it [command] [price]
